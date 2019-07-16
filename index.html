@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+ text-align:center;
+ background:#E0FFFF;
+}
+#canvas{
+  width: 144px;
+  height: 228px;
+  margin-right:11.5%;
+  margin-top:41%;
+  transform: rotate(355.5deg);
+}
+
+input[type="file"]{
+  color:white;
+  background:#00FF7F;
+  border-radius:10%;
+  border: 2px solid white;
+  padding:10px;
+  margin-top:5px;
+  margin-right:5px;
+  width:50%;
+}
+#img{
+    background:  no-repeat center ;
+    height: 600px;
+    width: 600px;
+    background-size:cover;
+    margin:auto;
+    margin-bottom:5%;
+    margin-top:22%;
+
+}
+
+#main_content{
+    text-align:center;
+    display: block;
+}
+.column img {
+  cursor: pointer; 
+}
+
+.column {
+  float: left;
+  padding:5px;
+  margin-top:30px;
+}
+</style>
+</head>
+<body>
+
+<input type="file" id="imageLoader" name="imageLoader"/>
+
+<div class="row">
+  <div class="column">
+    <img src="medium1.jpg" style="width:130px;height:150px;" onclick="f(this);">
+  </div>
+  <div class="column">
+    <img src="medium2.jpg" style="width:130px;height:150px;" onclick="f2(this);">
+  </div>
+  <div class="column">
+    <img src="medium3.jpg"  style="width:130px;height:150px;" onclick="f3(this);">
+  </div>
+  <div class="column">
+    <img src="medium4.jpg"  style="width:130px;height:150px;" onclick="f4(this);">
+  </div>
+</div>
+
+<div id="visible" style="display:none;">
+ <div id="img" >
+        <div id="main_content">
+         <canvas id="canvas" >
+        </div>
+ </div>
+</div>
+ 
+ <script>
+   
+var imageLoader = document.getElementById('imageLoader');
+imageLoader.addEventListener('change', handleImage, false);
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+
+
+function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+        var img = new Image();
+        img.onload =function() {
+             fitImageOn(canvas, img)
+              };
+
+    var fitImageOn = function(canvas, img) {
+  var imgAR = img.width / img.height;
+  var canAR = canvas.width / canvas.height;
+  var hgt, wth, xStart, yStart;
+   if(imgAR > canAR) {
+    wth = canvas.width
+    hgt = img.height * (wth / img.width);
+    xStart = 0;
+    yStart = (canvas.height - hgt) / 2;
+  }
+  else {
+    hgt = canvas.height;
+    wth = canvas.width;
+    xStart = 0;
+    yStart = 0;
+  }
+  context.drawImage(img, xStart, yStart, wth, hgt);
+ };
+ img.src = event.target.result;
+ }
+ reader.readAsDataURL(e.target.files[0]);     
+}
+
+  function f(imgs) {
+  document.getElementById("img").style.backgroundImage = "url('medium1.jpg')";
+  var expandImg = document.getElementById("img");
+  expandImg.parentElement.style.display = "block";
+ }
+ function f2(imgs) {
+  document.getElementById("img").style.backgroundImage = "url('medium2.jpg')";
+  var expandImg = document.getElementById("img");
+  expandImg.parentElement.style.display = "block";
+ }
+ function f3(imgs) {
+  document.getElementById("img").style.backgroundImage = "url('medium3.jpg')";
+  var expandImg = document.getElementById("img");
+  expandImg.parentElement.style.display = "block";
+ }
+ function f4(imgs) {
+  document.getElementById("img").style.backgroundImage = "url('medium4.jpg')";
+  var expandImg = document.getElementById("img");
+  expandImg.parentElement.style.display = "block";
+ }
+ </script>
+ </body>
+</html>
