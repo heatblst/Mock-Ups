@@ -12,6 +12,7 @@ body{
   margin-right:11.5%;
   margin-top:41%;
   transform: rotate(355.5deg);
+  object-fit: cover;
 }
 
 input[type="file"]{
@@ -51,8 +52,7 @@ input[type="file"]{
 </style>
 </head>
 <body>
-
-<input type="file" id="imageLoader" name="imageLoader"/>
+<input type="file" id="inp"/>
 
 <div class="row">
   <div class="column">
@@ -78,43 +78,22 @@ input[type="file"]{
 </div>
  
  <script>
-   
-var imageLoader = document.getElementById('imageLoader');
-imageLoader.addEventListener('change', handleImage, false);
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d');
-
-
-function handleImage(e){
-    var reader = new FileReader();
-    reader.onload = function(event){
-        var img = new Image();
-        img.onload =function() {
-             fitImageOn(canvas, img)
-              };
-
-    var fitImageOn = function(canvas, img) {
-  var imgAR = img.width / img.height;
-  var canAR = canvas.width / canvas.height;
-  var hgt, wth, xStart, yStart;
-   if(imgAR > canAR) {
-    wth = canvas.width+4;
-    hgt = img.height * (wth / img.width)+5;
-    xStart = 0;
-    yStart = (canvas.height - hgt) / 2;
+   document.getElementById('inp').onchange = function(e) {
+   var img = new Image();
+   img.onload = draw;
+   img.onerror = failed;
+   img.src = URL.createObjectURL(this.files[0]);
+  };
+  function draw() {
+   var canvas = document.getElementById('canvas');
+   canvas.width = this.width;
+   canvas.height = this.height;
+   var ctx = canvas.getContext('2d');
+   ctx.drawImage(this,0,0);
   }
-  else {
-    hgt = canvas.height;
-    wth = canvas.width;
-    xStart = 0;
-    yStart = 0;
+  function failed() {
+    console.error("The provided file couldn't be loaded as an Image media");
   }
-  context.drawImage(img, xStart, yStart, wth, hgt);
- };
- img.src = event.target.result;
- }
- reader.readAsDataURL(e.target.files[0]);     
-}
 
   function f(imgs) {
   document.getElementById("img").style.backgroundImage = "url('medium1.jpg')";
@@ -136,6 +115,6 @@ function handleImage(e){
   var expandImg = document.getElementById("img");
   expandImg.parentElement.style.display = "block";
  }
- </script>
+</script>
  </body>
 </html>
